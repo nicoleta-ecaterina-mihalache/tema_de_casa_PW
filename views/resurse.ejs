@@ -1,0 +1,29 @@
+<section class="resurse">
+    <br /><br /><br /><br /><br /><br /><br />
+    <h2>
+        <div class="aa">
+            Cinematografe din țară :)
+        </div>
+    </h2>
+    <br /><br />
+    <div>
+        <table class="bb">
+            <p><% p%></p>
+            <tr>
+                <td>Nr.</td>
+                <td>Nume</td>
+                <td>Oraș</td>
+                <td>Adresă</td>
+            </tr>
+            <%for(var i=0;i<p.length; i++){%>
+            <tr>
+                <td><%=i+1%></td>
+                <td><%=p[i]['nume']%></td>
+                <td><%=p[i]['oras']%></td>
+                <td><%=p[i]['adresa']%></td>
+            </tr>
+            <%}%>
+        </table>
+    </div>
+    <br /><br /><br />
+</section>

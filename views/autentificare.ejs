@@ -1,0 +1,33 @@
+<section class="autentificare">
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <div>
+        <h2>
+            <div class="d">
+                Autentificare utilizator
+            </div>
+        </h2>
+        <br /><br /><br />
+        <% if(user){ %>
+            <h2>Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
+        <% } %> 
+        <form method="POST" action="/verificare-autentificare">
+            <div class="a">
+                <label class="label" for="user">Nume Utilizator: &ensp;&ensp;&ensp;</label>
+                <input type="text" id= "user" name="user"><br />
+            </div>
+            
+            <div class="b">
+                <label class="label" for="password">Parolă:&ensp;&ensp;&ensp;</label>
+                <input type="password" id= "password" name="password"><br /><br />
+            </div>
+
+            <div class="c">
+                <button type="submit">Autentificare</button>
+            </div>
+            <br /><br /><br /><br />
+        </form><br />
+        <% if(eroare !== undefined){ %>
+            <h3 class="eroareM"><%=eroare%></h3>
+        <% } %>
+    </div>
+</section>

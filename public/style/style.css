@@ -1,0 +1,187 @@
+main.home
+{
+    background-image: url("../imagini/img3.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover; 
+    height: 850px;
+}
+
+section.autentificare
+{
+    background-image: url("../imagini/img13.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%; 
+    height: 850px;
+}
+
+section.inregistrare
+{
+    background-image: url("../imagini/img6.jpeg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%; 
+    height: 850px;
+}
+
+section.resurse
+{
+    background-image: url("../imagini/img16.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%; 
+    height: 850px;
+}
+
+body{
+    background-image: url("../imagini/img.webp");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+nav{
+    margin: 10px;
+    padding: 10px;
+    overflow: hidden;
+    background-color: rgb(139, 0, 0);
+    position: relative;
+    text-align: left;
+}
+
+nav a{ 
+    color: rgb(255, 102, 0);   
+    font: bold 18px Arial;   
+    text-shadow: 1px 1px 1px rgba(255, 147, 147, 0.8);    
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    padding: 0px 20px;
+}
+
+
+nav a:hover 
+{
+    color:  rgba(172, 2, 2, 0.8);
+}
+
+p{
+    color: rgb(251, 251, 251);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+p::first-letter {
+    color: rgb(245, 186, 118);
+    font-size: xx-large;
+}
+
+p.dashed {
+    border-color: rgb(251, 151, 37);
+    border-style: dashed;
+}
+
+p a{
+    color: rgb(245, 186, 118);
+}
+
+h1{
+    text-shadow: 2px 2px 5px rgb(141, 78, 5);
+    color:rgb(194, 137, 14);
+}
+
+h2{
+    text-shadow: 2px 2px 5px rgb(141, 78, 5);
+    color:rgb(194, 137, 14);
+}
+
+h3{
+    text-shadow: 2px 2px 5px rgb(141, 78, 5);
+    color:rgb(194, 137, 14);
+    text-align: center; 
+}
+
+footer{
+    color: rgb(248, 109, 17);
+    text-align: center; 
+}
+
+.label{
+    color: rgb(194, 81, 6);
+}
+
+
+.label1{
+    color: rgb(146, 7, 7);
+}
+
+.inreg{
+    color: rgb(146, 7, 7);
+}
+
+.center{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.fixed-header{
+    width: 100%;
+    position: fixed;        
+    background: rgb(66, 1, 1);
+    padding: 10px 0;
+}
+.eroareM{
+    font-size:22px;
+    color:red;
+    text-indent: 650px;
+}
+
+.eroareI{
+    font-size:22px;
+    color:red;
+    text-align: center;
+}
+
+div.a {
+    text-indent: 1100px;
+}
+
+div.b {
+    text-indent: 1118px;
+}
+
+div.c {
+    text-indent: 1200px;
+}
+
+div.d {
+    text-indent: 1110px;
+}
+
+div.aa{
+    text-indent: 200px;
+}
+
+table.bb{
+    margin-left:5%; 
+}
+
+section .content
+{
+    width: 60%;
+    margin-left: 20%;
+    padding: 25px;  
+    overflow: auto;
+    min-width: 1000px;  
+}
+
+table, th, td {
+    border: 1px solid rgb(255, 255, 255);
+  }
+
+tr td{
+    color:rgb(255, 255, 255);
+    text-align: center;
+}

@@ -1,0 +1,31 @@
+<section class="inregistrare">
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <h2 class="inreg">
+        <div class="center">
+            Înregistrare
+        </div>
+    </h2>
+    <% if(user){ %>
+        <h2>Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
+    <% } %> 
+    <form action="/verificare-inregistrare" method="POST">
+
+        <div  class="center">
+            <label  class="label1" for="user">Utilizator:&ensp;&ensp;&ensp;</label>
+            <input type="user" name="user" value="<%= typeof user != 'undefined' ? user : '' %>"/>
+        </div>
+
+        <div  class="center">
+            <label class="label1" for="password">Parolă:&ensp;&ensp;&ensp;</label>
+            <input type="password" name="password" value="<%= typeof password != 'undefined' ? password : '' %>"/>
+        </div><br />
+
+        <div class="center">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+    <p class="inreg">Ai cont deja? <a href="/autentificare"> Login</a></p>
+    <% if(eroare !== undefined){ %>
+        <h3 class="eroareI"><%=eroare%></h3>
+    <% } %>
+</section>

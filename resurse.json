@@ -1,0 +1,56 @@
+
+[
+    {
+        "nume": "Cinema City Atrium Mall",
+        "oras":"Arad",
+        "adresa":"Calea Aurel Vlaicu 10-12"
+    },
+    {
+        "nume": "Cinema City Arena Mall",
+        "oras":"Bacău",
+        "adresa":"Strada Ștefan cel Mare 28"
+    },
+    {
+        "nume": "Cinema City Mega Mall",
+        "oras":"București",
+        "adresa":"Bulevardul Pierre de Coubertin 3-5"
+    },
+    {
+        "nume": "Cinema City Park Lake",
+        "oras":"București",
+        "adresa":"Str. Liviu Rebreanu 4"
+    },
+    {
+        "nume": "Cinema City Iulius Mall",
+        "oras":"Iași",
+        "adresa":"Bulevardul Tudor Vladimirescu 2"
+    },
+    {
+        "nume": "Cinema City AFI",
+        "oras":"Ploiești",
+        "adresa":"Strada Calomfirescu 2"
+    },
+    {
+        "nume": "Cinema City VIVO!",
+        "oras":"Pitești",
+        "adresa":"Calea București 36"
+    },
+    {
+        "nume": "Cinema City Iulius Mall",
+        "oras":"Timișoara",
+        "adresa":"Strada Aristide Demetriade 1"
+    },
+    {
+        "nume": "Cinema City Shopping City",
+        "oras":"Timișoara",
+        "adresa":"Calea Șagului 100"
+    },
+    {
+        "nume": "Cinema City Shopping City",
+        "oras":"Ploiești",
+        "adresa":"Centura de Nord Ploiești 6"
+    }
+]
+
+
+
