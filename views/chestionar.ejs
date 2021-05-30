@@ -1,0 +1,25 @@
+<section class="chestionar">
+    <br /><br /><br />
+    <h1 class="t">Testează-ți cultura generală!</h1>
+    <% if(user){ %>
+        <h2 class="t">Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
+    <% } %>  
+    <form action="/rezultat-chestionar" method="POST" class="center">
+        <% var number = -1 
+        var radioValue; 
+        for(var obiect of intrebari){
+                number++
+                radioValue=0
+        %>
+            <label class="center"><%=obiect.intrebare %></label><br />
+            <% for(var varianta of obiect.variante){ %>
+                <input type="radio" name = "answer<%= number %>" value = "<%= radioValue %>">  
+                <label class="label2"><%=varianta %></label><br />   
+            <%
+            radioValue++ 
+            } %>
+            <br />
+        <% } %>
+        <input class="label" type="submit">
+    </form>
+</section>

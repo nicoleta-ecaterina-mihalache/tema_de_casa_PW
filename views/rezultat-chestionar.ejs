@@ -1,0 +1,11 @@
+<section class="center">
+    <br /><br />
+    <h1>Rezultatul chestionarului este:</h1>
+    <% if(user){ %>
+        <h2>Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
+    <% } %> 
+    <h3><%=quizResult%> 
+        <br /><br /><br /><br />
+        <a href = "/chestionar" class="t">Înapoi</a>
+    </h3>
+</section>

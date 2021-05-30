@@ -1,10 +1,12 @@
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const mysql = require('mysql2');
 
 const app = express();
 const session = require("express-session");
+var http= require('http');
 
 app.use(cookieParser());
 app.use(session({
@@ -16,9 +18,17 @@ app.use(session({
 	}
 }));
 
+var con = mysql.createConnection({
+	host: "localhost",
+	user: "ecaterina",
+	password: "ecaterina98"
+});
+
 const port = 6789;
 
 const fs = require('fs');
+
+let jsonData = require('./intrebari.json');
 
 var utilizatori;
 fs.readFile('utilizatori.json', (err,data) => {
@@ -45,16 +55,14 @@ app.get('/', (req, res) =>
 	res.render('acasa', {user: req.cookies.dataUser, data: req.session });
 });
 
-
-
 app.get('/autentificare', (req, res) => {
 	let mesajEroare = req.cookies.mesajEroare;
-	res.render('autentificare', {user: req.session.user, eroare: mesajEroare});
+	res.render('autentificare', {user: req.cookies.dataUser, eroare: mesajEroare});
 });
 
 app.get("/inregistrare", (req, res) => {
 	let mesaj = req.cookies.mesaj;
-	res.render('inregistrare', {user: req.session.user, eroare: mesaj});
+	res.render('inregistrare', {user: req.cookies.dataUser, eroare: mesaj});
 });
 
 
@@ -132,25 +140,84 @@ app.get('/logout', (req, res) => {
     res.redirect('/autentificare');
 });
 
+app.get('/get_curiozitati', (req, res) => {
+	let c;
+	fs.readFile('curiozitati.json', (err,data) => {
+		if(err) throw err;
+		c = JSON.parse(data);
+		res.send({curiozitati:c});
+	});
+});
+
+app.get('/creare-BD', (req, res) => {
+	con.connect(function(err) 
+	{
+	  if (err)
+	  {
+		  return console.error('Nu s-a putut stabili conexiunea cu baza de date: ' + err.message);
+	  }
+	  console.log("Connected!");
+	  con.query("CREATE DATABASE if not exists cumparaturi", function (err, result) 
+	  {
+		  if (err)
+		  {
+			  return console.error('Nu s-a putut crea baza de date cumparaturi: ' + err.message);
+		  }
+		  console.log("Database created");
+	  });
+	  con.query("use cumparaturi");
+	  con.query("CREATE TABLE if not exists filme (id_film INT NOT NULL AUTO_INCREMENT, film VARCHAR(20) NOT NULL, pret VARCHAR(10) NOT NULL, durata VARCHAR(10) NOT NULL, gen VARCHAR(30) NOT NULL , detalii VARCHAR(30) NOT NULL, PRIMARY KEY (produs_id))", function (err, result) {
+		  if (err) 
+		  {
+			  return console.error('Nu s-a putut crea tabela produse: ' + err.message);
+		  }
+		  console.log("Table created");
+		});
+	});
+  res.redirect('/');
+});
+
 // la accesarea din browser adresei http://localhost:6789/chestionar se va apela funcția specificată
 app.get('/chestionar', (req, res) => {
-	const listaIntrebari = [
-		{
-			intrebare: 'Întrebarea 1',
-			variante: ['varianta 1', 'varianta 2', 'varianta 3', 'varianta 4'],
-			corect: 0
-		},
-		//...
-	];
-	// în fișierul views/chestionar.ejs este accesibilă variabila 'intrebari' care conține vectorul de întrebări
-	res.render('chestionar', {intrebari: listaIntrebari});
+	res.render('chestionar', {user: req.cookies.dataUser, intrebari: jsonData});
 });
 
 app.post('/rezultat-chestionar', (req, res) => {
-	console.log(req.body);
-	res.send("formular: " + JSON.stringify(req.body));
+	var listaIntrebari;
+	var data = fs.readFileSync('intrebari.json');
+	listaIntrebari = JSON.parse(data);
+
+	data = req.body
+	var userAnswers = []
+
+	for(let answer in data)
+	{	
+		userAnswers.push(data[answer])
+	}
+
+	var result;
+	if(userAnswers.length === listaIntrebari.length)
+	{
+		var nr = 0;
+		for(var i = 0; i < listaIntrebari.length; i++)
+		{
+			if (listaIntrebari[i].corect == userAnswers[i])
+			{
+				nr++;
+			}
+		}
+		result = "Ai răspuns corect la " + nr + " din " + listaIntrebari.length + " întrebări."
+	}
+	else
+	{
+		result = "Vă rugăm să refaceți întreg formularul, bifând câte un răspuns pentru fiecare opțiune!"
+	}	
+	res.render("rezultat-chestionar", {user: req.cookies.dataUser, quizResult: result});
 });
 
-
 app.listen(port, () => console.log(`Serverul rulează la adresa http://localhost:`));
+
+
+
+
 

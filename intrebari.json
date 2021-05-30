@@ -1,0 +1,31 @@
+[   
+    {     
+        "intrebare":"Cum se numește actorul principal din filmul Nea Mărin Miliardar?",
+        "variante": ["Cristian Nemescu", "Amza Pellea", "Florin Şerban", "Nu știu"],
+        "corect": 2
+    },
+
+    {      
+        "intrebare":"Care era porecla profesoarei de matematică din Liceenii?",
+        "variante": ["Plinuța", "Echilateral", "Isoscel", "Nu avea poreclă"],
+        "corect": 3
+    },
+
+    { 
+        "intrebare":"În ce film a jucat Ștefan Bănică?",
+        "variante":["Ho Ho Ho", "Las Fierbinți", "La bloc", "Altă variantă"],
+        "corect":1
+    },
+
+    { 
+        "intrebare":"Din ce regiune a țării provine Florin Piersic?",
+        "variante":["Bucovina", "Ardeal", "Banat", "Altă variantă"],
+        "corect":1
+    },
+
+    { 
+        "intrebare":"Cine este actorul principal din filmul Șarpele apărut în anul 1996?",
+        "variante":["Mircea Albulescu", "Gheorghe Dinică", "Toma Caragiu", "Nu știu"],
+        "corect":2
+    }
+]

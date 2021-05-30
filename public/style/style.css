@@ -1,4 +1,4 @@
-main.home
+section.home
 {
     background-image: url("../imagini/img3.jpg");
     background-repeat: no-repeat;
@@ -28,6 +28,15 @@ section.inregistrare
 section.resurse
 {
     background-image: url("../imagini/img16.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%; 
+    height: 850px;
+}
+
+section.chestionar
+{
+    background-image: url("../imagini/img4.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%; 
@@ -69,7 +78,11 @@ nav a:hover
 p{
     color: rgb(251, 251, 251);
     font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
+}
+
+div.cl{
+    font-size:14px;
+    color:rgb(255, 255, 255);
 }
 
 p::first-letter {
@@ -112,12 +125,17 @@ footer{
 }
 
 
+.label2{
+    color: aqua;
+}
+
 .label1{
     color: rgb(146, 7, 7);
 }
 
 .inreg{
     color: rgb(146, 7, 7);
+    text-align: center;
 }
 
 .center{
@@ -160,12 +178,20 @@ div.d {
     text-indent: 1110px;
 }
 
+.ide{
+    text-indent: 1150px;
+}
+
 div.aa{
     text-indent: 200px;
 }
 
 table.bb{
     margin-left:5%; 
+}
+
+div.cc{
+    text-indent: 300px;
 }
 
 section .content
@@ -184,4 +210,9 @@ table, th, td {
 tr td{
     color:rgb(255, 255, 255);
     text-align: center;
+}
+
+.t{
+    text-align: center;
+    color: aqua;
 }
