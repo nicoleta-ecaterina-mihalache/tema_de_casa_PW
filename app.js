@@ -55,6 +55,12 @@ app.get('/', (req, res) =>
 	res.render('acasa', {user: req.cookies.dataUser, data: req.session });
 });
 
+app.get('/filme', (req, res) => 
+{
+	asyncCall();
+	res.render('filme', {user: req.cookies.dataUser, filme: records});
+});
+
 app.get('/autentificare', (req, res) => {
 	let mesajEroare = req.cookies.mesajEroare;
 	res.render('autentificare', {user: req.cookies.dataUser, eroare: mesajEroare});
@@ -82,6 +88,7 @@ app.post('/verificare-autentificare', (req, res) => {
 			req.session.rol = utilizatori[i].rol;
 			req.session.nume = utilizatori[i].nume;
 			req.session.prenume = utilizatori[i].prenume;
+			req.session.vector=[];
 			res.redirect('/');
 			return;
 		}
@@ -166,7 +173,7 @@ app.get('/creare-BD', (req, res) => {
 		  console.log("Database created");
 	  });
 	  con.query("use cumparaturi");
-	  con.query("CREATE TABLE if not exists filme (id_film INT NOT NULL AUTO_INCREMENT, film VARCHAR(20) NOT NULL, pret VARCHAR(10) NOT NULL, durata VARCHAR(10) NOT NULL, gen VARCHAR(30) NOT NULL , detalii VARCHAR(30) NOT NULL, PRIMARY KEY (produs_id))", function (err, result) {
+	  con.query("CREATE TABLE if not exists filme (id INT NOT NULL AUTO_INCREMENT, film VARCHAR(100) NOT NULL, pret VARCHAR(10) NOT NULL, durata VARCHAR(10) NOT NULL,ora VARCHAR(10) NOT NULL, gen VARCHAR(30) NOT NULL , detalii VARCHAR(30) NOT NULL, trailer VARCHAR(60) NOT NULL, PRIMARY KEY (id))", function (err, result) {
 		  if (err) 
 		  {
 			  return console.error('Nu s-a putut crea tabela produse: ' + err.message);
@@ -174,10 +181,110 @@ app.get('/creare-BD', (req, res) => {
 		  console.log("Table created");
 		});
 	});
-  res.redirect('/');
+  res.redirect('/filme');
 });
 
-// la accesarea din browser adresei http://localhost:6789/chestionar se va apela funcția specificată
+
+app.get('/inserare-BD', (req, res) => {
+	con.connect(function(err) {
+		if (err) 
+		{
+			return console.error('Nu s-a putut stabili conexiunea cu baza de date: ' + err.message);
+		}
+		console.log("Connected!");
+		con.query("use cumparaturi");
+		var sql = "INSERT INTO filme (id, film, pret, durata, ora, gen, detalii, trailer) VALUES ?";
+  		var values = [
+			[null,'BABARDEALA CU BUCLUC', '20lei','106min','12:40', 'Comedie, Drama','2D, RO', 'https://www.youtube.com/embed/6WDD1TpMvGY'],
+			[null,'INCA UN RAND', '22lei','115min','13:50', 'Drama','2D, DAN (SUB: RO)', 'https://www.youtube.com/embed/eg7E9kNlt8I'],
+			[null,'O SCHEMA DE MILIOANE', '20lei','104min', '16:20', 'Actiune, Comedie','EN (SUB: RO)', 'https://www.youtube.com/embed/QAAQhMEjNNg'],
+			[null,'IN BATAIA PUSTII', '25lei','108min', '18:10', 'Actiune, Drama, Thriller','EN (SUB: RO)', 'https://www.youtube.com/embed/VXoq3i_HNAc'],
+			[null,'TINUTUL NOMAZILOR', '20lei','108min', '20:30', 'Drama','EN (SUB: RO)', 'https://www.youtube.com/embed/_v6EnREcZGE']
+		  ];
+		con.query(sql, [values], function (err, result){
+			if (err) 
+			{
+				return console.error('Nu s-au putut insera datele: ' + err.message);
+			}
+			console.log("Date inserate cu succes!");
+		});
+	  });
+	res.redirect('/filme');
+});
+
+app.get('/sterge-BD', (req, res) => {
+	con.connect(function(err) {
+		if (err) 
+		{
+			return console.error('Nu s-a putut stabili conexiunea cu baza de date: ' + err.message);
+		}
+		console.log("Connected!");
+		con.query("use cumparaturi");
+		con.query("DROP TABLE filme", function (err, result){
+			if (err) 
+			{
+				return console.error('Nu s-au putut șterge datele: ' + err.message);
+			}
+			console.log("Date șterse!");
+		});
+	  });
+	res.redirect('/filme');
+});
+
+var data=[], records=[];
+function getRecords(){
+	return new Promise(resolve=>{
+		con.query('SELECT * FROM filme',[],(err,rows) =>
+		{
+			if(err)
+			{
+				return console.error(err.message);
+			}
+			rows.forEach((row) =>
+			{
+				data.push(row);
+			});
+			resolve(data);
+		});
+	});
+}
+
+async function asyncCall(){
+	records = await getRecords();
+}
+
+app.post('/adaugare_cos', (req, res) => {
+	req.session.vector.push(Number(req.body.id));
+	res.redirect('/filme');
+});
+
+app.get('/vizualizare-cos', (req, res) => {
+	console.log(req.session.vector);
+	var ids=req.session.vector;
+	var filmeAdaugate=[];
+	con.query("USE cumparaturi");
+	
+	con.query("SELECT * FROM filme", function (err, result, fields) {
+		if (err) throw err;
+		result.forEach(fil => {
+			var times=0;
+			ids.forEach(i => {
+				if(fil.id == i)
+				{
+					times = times+1;
+				}
+			});
+			if(times>=1)
+			{
+				filmeAdaugate.push({'film':fil.film,'pret':fil.pret,'buc':times});
+			}	
+		});
+		//console.log(filmeAdaugate);
+		res.render('vizualizare-cos',{filme: filmeAdaugate,user:req.session.user});
+	});
+	
+}); 
+
 app.get('/chestionar', (req, res) => {
 	res.render('chestionar', {user: req.cookies.dataUser, intrebari: jsonData});
 });

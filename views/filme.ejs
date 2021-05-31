@@ -1,0 +1,48 @@
+<section>
+    <br /><br /><br /><br /><br /><br />
+    <h1 class="center">FILMELE DE ASTĂZI!</h1>
+    <br />
+    <% if(user){ %>
+        <h2 class="center">Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
+        <h2 class="center">Bine ai venit, <%= user.user%>!</h2>
+        <div class="center">
+            <button><a href="/creare-BD">Creare BD</a></button>
+            <button><a href="/inserare-BD">Încărcare BD</a></button>
+            <button><a href="/sterge-BD">Șterge Date</a></button>
+            <button class="buton"><a href="/vizualizare-cos">Rezervări bilete</a> </button>
+        </div>
+    <%} else {%>
+        <h3>Pentru a putea rezerva bilete la film, te rugăm să te loghezi!</h3>
+    <%} %> 
+<div>
+        <div class="center">
+            <% if(filme){%>
+                <div>
+                    <% filme.forEach(fil => { %>
+                        <div>
+                            <br /><br />
+                            <h3><%=fil.film%></h3>
+                            <div class="ss">Preț: <%=fil.pret%> <br />
+                                Durata filmului: <%=fil.durata%> <br />
+                                Ora la care începe: <%=fil.ora%> <br />
+                                Genul filmului: <%=fil.gen%> <br />
+                                Informații: <%=fil.detalii%> <br /><br />
+                            </div>
+                            <iframe class="frame" src="<%= fil.trailer%>" alt="<%=fil.film%>" /></iframe><br />
+                        </div>
+                        <% if(user){ %>
+                        <form action='/adaugare_cos' method="POST">
+                            <input type="hidden" name="id" value = "<%= fil.id %>">
+                            <input type = "submit" value="Rezervă bilet">
+                        </form>
+                        <%} else {%> 
+                            <button disabled>Rezervă bilet</button>
+                        <%} %>
+                    <%}) %>
+                </div>
+                <br /><br />
+            <%} %>
+        </div>
+    <br />
+</div> 
+</section>

@@ -1,0 +1,18 @@
+<section>
+    <br /><br /><br /><br /><br />
+    <h3>Rezervări bilete</h3>
+    <form  class="formular" action="/comanda" method="POST">
+        <%if (filme.length>0){%>
+        <h4>Produse adăugate în coș</h4>
+        <div class="ce">
+            <ul class="rr">
+            <%  filme.forEach(fil =>  { %>
+                <ol><%= fil.film%>: <%= fil.pret%> lei x <%= fil.buc%> buc.</ol>
+            <% }) %>
+            </ul>
+        </div>
+        <%}else{%>
+            <h3>Coșul dvs este gol</h3>
+        <%}%>
+    </form>
+</section>

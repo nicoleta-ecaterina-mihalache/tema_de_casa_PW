@@ -183,7 +183,7 @@ div.d {
 }
 
 div.aa{
-    text-indent: 200px;
+    text-indent: 150px;
 }
 
 table.bb{
@@ -192,6 +192,9 @@ table.bb{
 
 div.cc{
     text-indent: 300px;
+}
+div.ce{
+    text-align: center;
 }
 
 section .content
@@ -215,4 +218,21 @@ tr td{
 .t{
     text-align: center;
     color: aqua;
+}
+
+div a{
+    text-align: center;
+    color: rgb(194, 137, 14);
+}
+div.ss{
+    color: rgb(194, 137, 14);
+}
+ul.rr{
+    color: rgb(194, 137, 14); 
+}
+
+.frame{
+    width:700px; 
+    height:400px;
+    overflow:auto;
 }
