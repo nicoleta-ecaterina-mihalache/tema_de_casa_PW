@@ -29,6 +29,7 @@ const port = 6789;
 const fs = require('fs');
 
 let jsonData = require('./intrebari.json');
+const e = require('express');
 
 var utilizatori;
 fs.readFile('utilizatori.json', (err,data) => {
@@ -47,28 +48,27 @@ app.use(bodyParser.json());
 // utilizarea unui algoritm de deep parsing care suportă obiecte în obiecte
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// la accesarea din browser adresei http://localhost:6789/ se va returna textul 'Hello World'
-// proprietățile obiectului Request - req - https://expressjs.com/en/api.html#req
-// proprietățile obiectului Response - res - https://expressjs.com/en/api.html#res
 app.get('/', (req, res) => 
-{//res.send('Hello World'));
+{
 	res.render('acasa', {user: req.cookies.dataUser, data: req.session });
 });
 
-app.get('/filme', (req, res) => 
-{
+app.get('/filme', (req, res) => {
 	asyncCall();
 	res.render('filme', {user: req.cookies.dataUser, filme: records});
 });
 
 app.get('/autentificare', (req, res) => {
 	let mesajEroare = req.cookies.mesajEroare;
-	res.render('autentificare', {user: req.cookies.dataUser, eroare: mesajEroare});
+	let mesaj_date_nex = req.cookies.mesaj_date_nex
+	res.render('autentificare', {user: req.cookies.dataUser, eroare1: mesajEroare, eroare: mesaj_date_nex});
 });
 
 app.get("/inregistrare", (req, res) => {
 	let mesaj = req.cookies.mesaj;
-	res.render('inregistrare', {user: req.cookies.dataUser, eroare: mesaj});
+	let eroare = req.cookies.eroare;
+	let mesajeroare = req.cookies.mesajeroare;
+	res.render('inregistrare', {user: req.cookies.dataUser, eroare2:mesajeroare, eroare1: eroare, eroare: mesaj});
 });
 
 
@@ -80,55 +80,75 @@ app.post('/verificare-autentificare', (req, res) => {
 	});
 	for(let i=0; i < utilizatori.length; i++)
 	{
-		if(utilizatori[i].user == req.body.user && utilizatori[i].password == req.body.password)
+		if(req.body.user != "" && req.body.password != "")
 		{
-			res.cookie("dataUser", {user: req.body.user, password: req.body.password});
-			gasit = true;
-			req.session.user = req.body.user;
-			req.session.rol = utilizatori[i].rol;
-			req.session.nume = utilizatori[i].nume;
-			req.session.prenume = utilizatori[i].prenume;
-			req.session.vector=[];
-			res.redirect('/');
+			if(utilizatori[i].user == req.body.user && utilizatori[i].password == req.body.password)
+			{
+				res.cookie("dataUser", {user: req.body.user, password: req.body.password, rol: req.body.rol});
+				gasit = true;
+				req.session.user = req.body.user;
+				req.session.rol = utilizatori[i].rol;
+				req.session.nume = utilizatori[i].nume;
+				req.session.prenume = utilizatori[i].prenume;
+				req.session.vector=[];
+				res.redirect('/');
+				return;
+			}
+		}
+		else
+		{
+			res.cookie("mesaj_date_nex", "Nu ați introdus date!"); 
+			res.redirect('/autentificare');
 			return;
 		}
 	}
 	if(!gasit)
 	{
-		res.cookie("mesajEroare", "User invalid sau parolă invalidă!"); 
+		res.cookie("mesajEroare", "User invalid și/sau parolă invalidă!"); 
 		res.redirect('/autentificare');
 	}
-
 	res.end();
 });
 
 app.post('/verificare-inregistrare' ,(req, res) => {
 	let gasit = false;
-
-	for(let i=0; i < utilizatori.length; i++)
-	{
-		if(utilizatori[i].user == req.body.user)
+	if(req.body.user != "" && req.body.password !="" && req.body.password2)
+		if(req.body.password == req.body.password2)
 		{
-			gasit = true;
-			res.cookie("mesaj", "User existent!"); 
-			res.redirect('/inregistrare');
+			for(let i=0; i < utilizatori.length; i++)
+			{
+				if(utilizatori[i].user == req.body.user)
+				{
+					gasit = true;
+					res.cookie("mesaj", "User existent!"); 
+					res.redirect('/inregistrare');
+				}
+			}
+			if(!gasit)
+			{
+				let obj= {"user" : req.body.user , "password" : req.body.password, "rol": "user"};
+				utilizatori.push(obj);
+				var obj2 = JSON.stringify(utilizatori);
+
+				fs.writeFile('utilizatori.json', obj2, err => {
+					if(err) throw err;
+					
+					console.log("User adaugat!");
+				});   
+				res.redirect('/autentificare');
+				return;
+			}
 		}
-	}
-
-	if(!gasit)
+		else
+		{
+			res.cookie("eroare", "Datele introduse sunt incorecte!"); 
+			res.redirect('/inregistrare');
+		}	
+	else
 	{
-		let obj= {"user" : req.body.user , "password" : req.body.password, "rol": "user"};
-		utilizatori.push(obj);
-		var obj2 = JSON.stringify(utilizatori);
-
-		fs.writeFile('utilizatori.json', obj2, err => {
-			if(err) throw err;
-			
-			console.log("User adaugat!");
-		});   
-		res.redirect('/autentificare');
-		return;
-	}
+		res.cookie("mesajeroare", "Nu ați introdus date!"); 
+		res.redirect('/inregistrare');
+	}	
 	res.end();
 });
 
@@ -154,6 +174,28 @@ app.get('/get_curiozitati', (req, res) => {
 		c = JSON.parse(data);
 		res.send({curiozitati:c});
 	});
+});
+
+
+function startTime() 
+{
+  var today = new Date();
+  var d = today.getDate();
+  var mt = today.getMonth();
+  var y= today.getFullYear();
+
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  var data = "Data: " + d + "-" + mt + "-" + y + " Ora: " + h + ":" + m + ":" + s;
+  return data;
+}
+
+app.get('/get_data', (req, res) => {
+	var data = startTime();
+	var dat = data.toString();
+	console.log(dat);
+	res.send(dat);
 });
 
 app.get('/creare-BD', (req, res) => {
@@ -195,11 +237,17 @@ app.get('/inserare-BD', (req, res) => {
 		con.query("use cumparaturi");
 		var sql = "INSERT INTO filme (id, film, pret, durata, ora, gen, detalii, trailer) VALUES ?";
   		var values = [
-			[null,'BABARDEALA CU BUCLUC', '20lei','106min','12:40', 'Comedie, Drama','2D, RO', 'https://www.youtube.com/embed/6WDD1TpMvGY'],
-			[null,'INCA UN RAND', '22lei','115min','13:50', 'Drama','2D, DAN (SUB: RO)', 'https://www.youtube.com/embed/eg7E9kNlt8I'],
-			[null,'O SCHEMA DE MILIOANE', '20lei','104min', '16:20', 'Actiune, Comedie','EN (SUB: RO)', 'https://www.youtube.com/embed/QAAQhMEjNNg'],
-			[null,'IN BATAIA PUSTII', '25lei','108min', '18:10', 'Actiune, Drama, Thriller','EN (SUB: RO)', 'https://www.youtube.com/embed/VXoq3i_HNAc'],
-			[null,'TINUTUL NOMAZILOR', '20lei','108min', '20:30', 'Drama','EN (SUB: RO)', 'https://www.youtube.com/embed/_v6EnREcZGE']
+			[null,'Oxygene', '20lei','100min','12:40', 'Drama, Fantezie, SF','2D, FR (SUB: RO)', 'https://www.youtube.com/embed/8IqXgZd-P98'],
+			[null,'Justice Society', '22lei','84min','13:50', 'Actiune, Animatie, Aventura','2D, EN (SUB: RO)', 'https://www.youtube.com/embed/s4xXbGFhEFg'],
+			[null,'Taking a Shot at Love', '20lei','84min', '16:20', 'Drama, Romantic','EN (SUB: RO)', 'https://www.youtube.com/embed/-ApvNcVaIlc'],
+			[null,'In bataia pustii', '25lei','108min', '18:10', 'Actiune, Drama, Thriller','EN (SUB: RO)', 'https://www.youtube.com/embed/VXoq3i_HNAc'],
+			[null,'Tinutul nomazilor', '20lei','108min', '20:30', 'Drama','EN (SUB: RO)', 'https://www.youtube.com/embed/_v6EnREcZGE'],
+			[null,'Bad Trip', '21lei','84min', '22:30', 'Drama, Comedie','EN (SUB: RO)', 'https://www.youtube.com/embed/UjT9I6eb4p8'],
+			[null,'Cats & Dogs 3', '20lei','84min', '17:30', 'Actiune, Animatie, Aventura','EN (SUB: RO)', 'https://www.youtube.com/embed/ct5mQYE3Xk4'],
+			[null,'Oslo', '26lei','118min', '00:30', 'Drama, Istoric, Suspans','EN (SUB: RO)', 'https://www.youtube.com/embed/QsRlXQcHd8c'],
+			[null,'Miracolul albastru', '24lei','96min', '22:30', 'Aventura, Drama, Istoric','EN (SUB: RO)', 'https://www.youtube.com/embed/pXHCBnT3d4k'],
+			[null,'Mission Possible', '26lei','104min', '21:30', 'Actiune, Comedie, Crima','EN (SUB: RO)', 'https://www.youtube.com/embed/pKuI631JhY0'],
+			[null,'Wrath of Man', '22lei','118min', '22:00', 'Actiune, Suspans','EN (SUB: RO)', 'https://www.youtube.com/embed/EFYEni2gsK0']
 		  ];
 		con.query(sql, [values], function (err, result){
 			if (err) 
@@ -279,11 +327,36 @@ app.get('/vizualizare-cos', (req, res) => {
 				filmeAdaugate.push({'film':fil.film,'pret':fil.pret,'buc':times});
 			}	
 		});
-		//console.log(filmeAdaugate);
-		res.render('vizualizare-cos',{filme: filmeAdaugate,user:req.session.user});
+		res.render('vizualizare-cos',{filme: filmeAdaugate, user:req.session.user});
 	});
-	
 }); 
+
+app.get('/adaugare-BD', (req, res) => {
+	res.render('adaugare-BD',{mesaj:"Film adaugat cu succes!",user:req.session.user});
+});
+
+app.post('/adauga-BD', (req, res) => {
+	let data=[];
+	data.push(Number(req.body.id));
+	data.push(req.body.film);
+	data.push(req.body.pret);
+	data.push(req.body.durata);
+	data.push(req.body.ora);
+	data.push(req.body.gen);
+	data.push(req.body.detalii);
+	data.push(req.body.trailer);
+	con.connect(function(err) {
+		if (err) throw err;
+		console.log("Connected!");
+		con.query("USE cumparaturi");
+		con.query("INSERT INTO filme (id, film, pret, durata, ora, gen, detalii, trailer)VALUES (?,?,?,?,?,?,?,?)",data,function (err, result) {
+			if (err) throw err;
+			console.log("Film adaugat cu succes!");
+			res.render('adaugare-BD');
+		});		
+	});	
+});
+
 
 app.get('/chestionar', (req, res) => {
 	res.render('chestionar', {user: req.cookies.dataUser, intrebari: jsonData});
@@ -293,15 +366,12 @@ app.post('/rezultat-chestionar', (req, res) => {
 	var listaIntrebari;
 	var data = fs.readFileSync('intrebari.json');
 	listaIntrebari = JSON.parse(data);
-
 	data = req.body
 	var userAnswers = []
-
 	for(let answer in data)
 	{	
 		userAnswers.push(data[answer])
 	}
-
 	var result;
 	if(userAnswers.length === listaIntrebari.length)
 	{

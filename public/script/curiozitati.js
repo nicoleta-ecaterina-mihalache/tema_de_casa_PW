@@ -16,3 +16,18 @@ function incarcaCuriozitati()
     xhttp.open("GET", r, true);
     xhttp.send();
 }
+
+function incarcaData()
+{
+    var xhttp = new XMLHttpRequest();
+    let r ='/get_data';
+    xhttp.onreadystatechange = function(){
+        if(this.readyState ==4 && this.status ==200)
+        {
+            document.getElementById('data+ora').innerHTML = this.responseText;
+        }
+    }
+    xhttp.open("GET", r, true);
+    xhttp.send();
+}
+

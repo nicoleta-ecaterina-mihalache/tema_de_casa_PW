@@ -18,14 +18,26 @@
         <div  class="center">
             <label class="label1" for="password">Parolă:&ensp;&ensp;&ensp;</label>
             <input type="password" name="password" value="<%= typeof password != 'undefined' ? password : '' %>"/>
+        </div>
+
+        <div  class="center">
+            <label class="label1" for="password2">Confirmare parolă:&ensp;&ensp;&ensp;</label>
+            <input type="password" name="password2" value="<%= typeof password2 != 'undefined' ? password2 : '' %>"/>
         </div><br />
 
         <div class="center">
-            <button type="submit">Register</button>
+            <button type="submit">Înregistrare</button>
         </div>
     </form>
     <p class="inreg">Ai cont deja? <a href="/autentificare"> Login</a></p>
-    <% if(eroare !== undefined){ %>
-        <h3 class="eroareI"><%=eroare%></h3>
+    <% if(eroare2 !== undefined){ %>
+        <h3 class="eroareI"><%=eroare2%></h3>
+    <% }  else {%>
+        <% if(eroare1 !== undefined){ %>
+            <h3 class="eroareI"><%=eroare1%></h3>
+        <% } %>
+        <% if(eroare !== undefined){ %>
+            <h3 class="eroareI"><%=eroare%></h3>
+        <% } %>
     <% } %>
 </section>

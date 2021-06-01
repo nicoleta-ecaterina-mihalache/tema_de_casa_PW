@@ -1,19 +1,26 @@
 <section>
-    <br /><br /><br /><br /><br /><br />
-    <h1 class="center">FILMELE DE ASTĂZI!</h1>
-    <br />
     <% if(user){ %>
+        <br /><br /><br /><br /><br /><br />
+        <h1 class="center">FILMELE DE ASTĂZI!</h1>
+        <br />
         <h2 class="center">Logat ca <%= user.user%>. <button class="buton"><a href="/logout">Logout</a></button></h2>
         <h2 class="center">Bine ai venit, <%= user.user%>!</h2>
         <div class="center">
-            <button><a href="/creare-BD">Creare BD</a></button>
-            <button><a href="/inserare-BD">Încărcare BD</a></button>
-            <button><a href="/sterge-BD">Șterge Date</a></button>
             <button class="buton"><a href="/vizualizare-cos">Rezervări bilete</a> </button>
         </div>
+        <% if(user.rol == 'admin'){ %>
+            <div class="center">
+                <button><a href="/creare-BD">Creare BD</a></button>
+                <button><a href="/inserare-BD">Încărcare BD</a></button>
+                <button><a href="/sterge-BD">Șterge Date</a></button>
+                <button><a href="/adaugare-BD">Adaugă Date</a></button>
+            </div>
+        <%} %>
     <%} else {%>
-        <h3>Pentru a putea rezerva bilete la film, te rugăm să te loghezi!</h3>
+        <br/><br/><br/><br/><br/><br/>
+        <h2 class="center">Pentru a putea rezerva bilete la film, te rugăm să te loghezi!</h2>
     <%} %> 
+    
 <div>
         <div class="center">
             <% if(filme){%>
@@ -27,7 +34,7 @@
                                 Ora la care începe: <%=fil.ora%> <br />
                                 Genul filmului: <%=fil.gen%> <br />
                                 Informații: <%=fil.detalii%> <br /><br />
-                            </div>
+                            </div><br />
                             <iframe class="frame" src="<%= fil.trailer%>" alt="<%=fil.film%>" /></iframe><br />
                         </div>
                         <% if(user){ %>
